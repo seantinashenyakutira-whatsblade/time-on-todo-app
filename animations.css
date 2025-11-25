@@ -1,0 +1,70 @@
+/*
+  Contributors
+  Software Engineer (Back-end, Front-end, and Architecture)
+  Name: Sean Nyakutira
+  Contacts: 
+    - WhatsApp: +260 776950796
+    - Phone: +260 968597996
+    - Email: seantinashenyakutira@gmail.com
+    - GitHub: https://github.com/seantinashenyakutira-whatsblade
+
+  Software Engineer and Front-end
+  Name: Zvikomborero Svotwa
+  Contacts:
+    - Email: svotwaZvikomborero28@gmail.com
+    - GitHub: https://github.com/svotwazvikomborero28-sudo
+*/
+
+@keyframes floatGradient {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.05) translateY(-10px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 80px 80px;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(12);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sidebar,
+.top-bar,
+.quick-stats .stat,
+.task-panel,
+.task-groups,
+.consistency-panel,
+.modal-content {
+  animation: fadeUp 0.6s ease both;
+}
+

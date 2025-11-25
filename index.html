@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<!--
+  Contributors
+  Software Engineer (Back-end, Front-end, and Architecture)
+  Name: Sean Nyakutira
+  Contacts: 
+    - WhatsApp: +260 776950796
+    - Phone: +260 968597996
+    - Email: seantinashenyakutira@gmail.com
+    - GitHub: https://github.com/seantinashenyakutira-whatsblade
+
+  Software Engineer and Front-end
+  Name: Zvikomborero Svotwa
+  Contacts:
+    - Email: svotwaZvikomborero28@gmail.com
+    - GitHub: https://github.com/svotwazvikomborero28-sudo
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="description" content="A modern, animated to-do list web application with routine templates, alarm system, and consistency tracking." />
+    <meta name="theme-color" content="#6d87ff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Time-On" />
+    
+    <title>Time-On | Calm To-Do & Routine Planner</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json" />
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512x512.png" />
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="light-theme">
+    <div class="bg-gradient" aria-hidden="true"></div>
+    <div class="particle-layer" aria-hidden="true"></div>
+    <div class="app-shell">
+      <aside class="sidebar elevation-float">
+        <div class="brand">
+          <div class="brand-badge">⏱️</div>
+          <div>
+            <h1>Time-On</h1>
+            <p>Shape your day with ease</p>
+          </div>
+        </div>
+
+        <div class="greeting-card">
+          <p class="greeting-text" id="greetingText">Good Day</p>
+          <small>Your calm personal command center</small>
+        </div>
+
+        <nav class="nav-groups">
+          <div class="nav-heading">Categories</div>
+          <button class="nav-item active" data-category="daily">Daily To-Do</button>
+          <button class="nav-item" data-category="important">Important</button>
+          <button class="nav-item" data-category="completed">Completed</button>
+        </nav>
+
+        <div class="nav-heading">Filters</div>
+        <div class="filter-group">
+          <button class="chip" data-filter="today">Today</button>
+          <button class="chip" data-filter="important">Important</button>
+          <button class="chip" data-filter="completed">Completed</button>
+          <button class="chip" data-filter="all">All</button>
+        </div>
+
+        <div class="nav-heading">Modes</div>
+        <button class="mode-toggle" id="themeToggle">
+          <span>Dark / Light</span>
+          <div class="toggle-indicator"></div>
+        </button>
+
+        <div class="nav-heading">Utilities</div>
+        <div class="utility-actions">
+          <button id="openTemplates" class="utility-btn">Template Builder</button>
+          <button id="openAlarm" class="utility-btn">Alarm & Reminder</button>
+          <button id="exportJson" class="utility-btn">Export Tasks (.json)</button>
+          <button id="toggleQuotes" class="utility-btn">Toggle Quotes</button>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="top-bar elevation-float">
+          <div>
+            <h2>Dashboard</h2>
+            <p>Intentional focus, one task at a time.</p>
+          </div>
+          <div class="top-bar-actions">
+            <div class="search-box">
+              <input type="search" id="searchInput" placeholder="Search tasks, notes, tags..." />
+              <span class="material-icon">⌕</span>
+            </div>
+            <button class="primary-btn ripple" id="openSummary">Daily Summary</button>
+          </div>
+        </header>
+
+        <section class="quick-stats elevation-float">
+          <div class="stat">
+            <p>Focus Score</p>
+            <h3 id="focusScore">0%</h3>
+          </div>
+          <div class="stat">
+            <p>Tasks Completed</p>
+            <h3 id="tasksCompletedCount">0</h3>
+          </div>
+          <div class="stat">
+            <p>Pending</p>
+            <h3 id="tasksPendingCount">0</h3>
+          </div>
+          <div class="stat">
+            <p>Consistency</p>
+            <h3 id="consistencyRate">0 days streak</h3>
+          </div>
+        </section>
+
+        <section class="main-grid">
+          <div class="task-panel elevation-float">
+            <div class="panel-header">
+              <h3>Create Task</h3>
+              <small>Capture what matters and schedule with intention.</small>
+            </div>
+            <form id="taskForm" class="task-form">
+              <input type="hidden" id="taskId" />
+              <label>
+                Title
+                <input
+                  required
+                  type="text"
+                  id="taskTitle"
+                  placeholder="e.g. Design sprint sync"
+                />
+              </label>
+              <label>
+                Category
+                <select id="taskCategory">
+                  <option value="daily">Daily To-Do</option>
+                  <option value="important">Important</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </label>
+              <label>
+                Due date & time
+                <input type="datetime-local" id="taskDue" />
+              </label>
+              <label>
+                Notes
+                <textarea id="taskNotes" rows="3" placeholder="Add context or resources..."></textarea>
+              </label>
+              <label class="checkbox-row">
+                <input type="checkbox" id="taskImportant" />
+                <span>Mark as important</span>
+              </label>
+              <button class="primary-btn ripple" type="submit">Save Task</button>
+              <button class="ghost-btn" type="reset" id="cancelEdit">Cancel</button>
+            </form>
+          </div>
+
+          <div class="task-groups elevation-float">
+            <div class="panel-header">
+              <h3>Task Stream</h3>
+              <small>Grouped by your focus areas.</small>
+            </div>
+            <div id="taskGroups"></div>
+          </div>
+        </section>
+
+        <section class="consistency-panel elevation-float">
+          <div class="panel-header">
+            <h3>Consistency Graph</h3>
+            <small>Visualize your steady progress.</small>
+          </div>
+          <canvas id="consistencyGraph" width="600" height="280" aria-label="weekly consistency bar chart"></canvas>
+        </section>
+      </main>
+    </div>
+
+    <!-- Template Modal -->
+    <div class="modal" id="templateModal" aria-hidden="true">
+      <div class="modal-content elevation-float">
+        <button class="modal-close" data-modal-close>×</button>
+        <h3>Routine Templates</h3>
+        <p>Select a blueprint and customize before saving.</p>
+        <div class="template-tabs">
+          <button class="chip active" data-template="selfCare">Self-Care</button>
+          <button class="chip" data-template="student">Student</button>
+          <button class="chip" data-template="work">Work</button>
+        </div>
+        <div class="template-preview" id="templatePreview"></div>
+        <button class="primary-btn ripple" id="applyTemplate">Add to Tasks</button>
+      </div>
+    </div>
+
+    <!-- Alarm Modal -->
+    <div class="modal" id="alarmModal" aria-hidden="true">
+      <div class="modal-content elevation-float">
+        <button class="modal-close" data-modal-close>×</button>
+        <h3>Alarm & Reminder</h3>
+        <label>
+          Set time
+          <input type="time" id="alarmTime" />
+        </label>
+        <label>
+          Select sound
+          <input type="file" id="alarmSoundInput" accept="audio/*" />
+        </label>
+        <audio id="alarmAudio" preload="auto" src="assets/sounds/soft-tone.mp3"></audio>
+        <div class="alarm-actions">
+          <button class="primary-btn ripple" id="setAlarm">Set Alarm</button>
+          <button class="ghost-btn" id="stopAlarm">Stop</button>
+        </div>
+        <p class="alarm-status" id="alarmStatus">No alarm set.</p>
+      </div>
+    </div>
+
+    <!-- Alarm Popup -->
+    <div class="alarm-popup elevation-float" id="alarmPopup" aria-hidden="true">
+      <p>Time to focus</p>
+      <h3 id="alarmPopupTime">00:00</h3>
+      <div class="alarm-popup-actions">
+        <button class="primary-btn ripple" id="snoozeAlarm">Snooze</button>
+        <button class="ghost-btn" id="dismissAlarm">Stop</button>
+      </div>
+    </div>
+
+    <!-- Quotes Popup -->
+    <div class="quote-popup elevation-float" id="quotePopup" aria-hidden="true">
+      <p id="quoteText">You are doing amazing.</p>
+      <button class="ghost-btn" id="closeQuote">Dismiss</button>
+    </div>
+
+    <!-- Summary Modal -->
+    <div class="modal" id="summaryModal" aria-hidden="true">
+      <div class="modal-content elevation-float">
+        <button class="modal-close" data-modal-close>×</button>
+        <h3>Daily Summary</h3>
+        <div id="summaryContent"></div>
+      </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/templates.js"></script>
+    <script src="js/alarm.js"></script>
+    <script src="js/quotes.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then((registration) => {
+              console.log('Service Worker registered:', registration.scope);
+            })
+            .catch((error) => {
+              console.log('Service Worker registration failed:', error);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
+

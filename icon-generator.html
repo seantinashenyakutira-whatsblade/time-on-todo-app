@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Icon Generator - Time-On</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f6f7fb;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    canvas {
+      border: 2px solid #6d87ff;
+      border-radius: 12px;
+      margin: 20px 0;
+    }
+    button {
+      background: #6d87ff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+    button:hover {
+      background: #4d5dd9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Time-On Icon Generator</h1>
+    <p>This tool generates all required PWA icons from a single canvas.</p>
+    
+    <canvas id="iconCanvas" width="512" height="512"></canvas>
+    
+    <div>
+      <button onclick="generateIcons()">Generate All Icons</button>
+      <button onclick="downloadAll()">Download All Icons</button>
+    </div>
+    
+    <div id="status"></div>
+  </div>
+
+  <script>
+    const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+    
+    function drawIcon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      canvas.width = size;
+      canvas.height = size;
+      
+      // Background gradient
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#6d87ff');
+      gradient.addColorStop(1, '#4d5dd9');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+      
+      // Draw clock/stopwatch icon
+      ctx.fillStyle = 'white';
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = size * 0.03;
+      
+      // Circle
+      const centerX = size / 2;
+      const centerY = size / 2;
+      const radius = size * 0.3;
+      
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Clock hands
+      ctx.lineWidth = size * 0.04;
+      ctx.lineCap = 'round';
+      
+      // Hour hand (pointing to 3)
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(centerX + radius * 0.5, centerY);
+      ctx.stroke();
+      
+      // Minute hand (pointing to 12)
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(centerX, centerY - radius * 0.6);
+      ctx.stroke();
+      
+      // Center dot
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, size * 0.03, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    function generateIcons() {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = '<p>Generating icons...</p>';
+      
+      sizes.forEach(size => {
+        const canvas = document.createElement('canvas');
+        drawIcon(canvas, size);
+        
+        // Convert to blob and create download link
+        canvas.toBlob(blob => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `icon-${size}x${size}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        });
+      });
+      
+      setTimeout(() => {
+        statusDiv.innerHTML = '<p style="color: green;">✓ All icons generated and downloaded!</p>';
+      }, 1000);
+    }
+    
+    function downloadAll() {
+      generateIcons();
+    }
+    
+    // Draw preview
+    window.onload = () => {
+      const canvas = document.getElementById('iconCanvas');
+      drawIcon(canvas, 512);
+    };
+  </script>
+</body>
+</html>
+
